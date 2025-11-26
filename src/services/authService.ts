@@ -110,6 +110,13 @@ export const authService = {
         return response.json();
     },
 
+    getGithubRepo: async (owner: string, repo: string) => {
+        const response = await fetch(`${API_URL}/github/repo/${owner}/${repo}`, {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
     getGithubRepoTree: async (owner: string, repo: string, branch: string) => {
         const response = await fetch(`${API_URL}/github/repo/${owner}/${repo}/tree/${branch}`, {
             headers: getHeaders(),
@@ -121,6 +128,56 @@ export const authService = {
         // Encode path to handle slashes
         const encodedPath = path.split('/').map(encodeURIComponent).join('/');
         const response = await fetch(`${API_URL}/github/repo/${owner}/${repo}/contents/${encodedPath}`, {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
+    reviewCode: async (code: string, filename: string) => {
+        const response = await fetch('/api/review', {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ code, filename }),
+        });
+        return response.json();
+    },
+
+    reviewProject: async (files: Array<{ path: string; content: string; filename: string }>) => {
+        const response = await fetch('/api/review/project', {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ files }),
+        });
+        return response.json();
+    },
+
+    chat: async (message: string, conversationHistory: Array<{ role: string; content: string }>, model: string = 'gemini') => {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ message, conversationHistory, model }),
+        });
+        return response.json();
+    },
+
+    saveReview: async (data: any) => {
+        const response = await fetch('/api/review/save', {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(data),
+        });
+        return response.json();
+    },
+
+    getHistory: async () => {
+        const response = await fetch('/api/review/history', {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
+    getReviewById: async (id: string) => {
+        const response = await fetch(`/api/review/${id}`, {
             headers: getHeaders(),
         });
         return response.json();

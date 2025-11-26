@@ -8,7 +8,8 @@ import {
   ProfilePage,
   HistoryPage,
   NewReviewPage,
-  ReviewResultsPage
+  ReviewResultsPage,
+  AIAssistantPage
 } from "./pages/dashboard";
 import BillingPage from "./pages/BillingPage";
 import { LoginCard, AuthCard, ForgotPasswordCard } from "./pages/auth";
@@ -23,7 +24,7 @@ export default function App() {
   });
   const navigate = useNavigate();
 
-  const handleLogin = (email: string, pass: string) => {
+  const handleLogin = (_email: string, _pass: string) => {
     // Set logged in state (the actual authentication is handled by the backend)
     setIsLoggedIn(true);
     // Redirect to landing page
@@ -80,10 +81,11 @@ export default function App() {
             />
           } />
           <Route path="new-review" element={<NewReviewPage onRunReview={() => navigate("/dashboard/results")} />} />
+          <Route path="ai-assistant" element={<AIAssistantPage />} />
           <Route path="history" element={<HistoryPage />} />
           <Route path="billing" element={<BillingPage onBack={() => navigate("/dashboard")} embedded={true} />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="results" element={<ReviewResultsPage onBack={() => navigate("/dashboard")} />} />
+          <Route path="results" element={<ReviewResultsPage onBack={() => navigate("/dashboard/new-review")} />} />
         </Route>
 
       </Routes>

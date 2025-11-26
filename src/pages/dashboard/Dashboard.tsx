@@ -5,7 +5,8 @@ import {
     FaHistory,
     FaCreditCard,
     FaUser,
-    FaBell
+    FaBell,
+    FaRobot
 } from "react-icons/fa";
 
 export default function Dashboard() {
@@ -13,7 +14,7 @@ export default function Dashboard() {
     const isReviewResults = location.pathname.includes("/results");
 
     return (
-        <div className="min-h-screen bg-[#0b1120] flex font-sans text-gray-100">
+        <div className={`${location.pathname.includes("/ai-assistant") ? "h-screen" : "min-h-screen"} bg-[#0b1120] flex font-sans text-gray-100 overflow-hidden`}>
             {/* Sidebar */}
             {!isReviewResults && (
                 <aside className="w-64 bg-[#0f1623] border-r border-gray-800 flex flex-col">
@@ -35,6 +36,12 @@ export default function Dashboard() {
                             className={({ isActive }) => `w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-[#1e293b] text-blue-400" : "text-gray-400 hover:text-white hover:bg-[#1e293b]/50"}`}
                         >
                             <FaPlus /> New Review
+                        </NavLink>
+                        <NavLink
+                            to="/dashboard/ai-assistant"
+                            className={({ isActive }) => `w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-[#1e293b] text-blue-400" : "text-gray-400 hover:text-white hover:bg-[#1e293b]/50"}`}
+                        >
+                            <FaRobot /> AI Assistant
                         </NavLink>
                         <NavLink
                             to="/dashboard/history"
@@ -73,7 +80,7 @@ export default function Dashboard() {
                 </header>
 
                 {/* Dashboard Content */}
-                <div className="flex-1 overflow-y-auto p-8">
+                <div className={`flex-1 ${location.pathname.includes("/ai-assistant") ? "overflow-hidden flex flex-col" : "overflow-y-auto p-8"}`}>
                     <Outlet />
                 </div>
             </main>

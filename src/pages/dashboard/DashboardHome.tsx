@@ -1,4 +1,7 @@
+import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
+import { authService } from "../../services/authService";
+import { div } from "motion/react-client";
 
 interface DashboardHomeProps {
     onStartNewReview: () => void;
@@ -6,6 +9,22 @@ interface DashboardHomeProps {
 }
 
 export default function DashboardHome({ onStartNewReview, onManageSubscription }: DashboardHomeProps) {
+    const [userName, setUserName] = useState("User");
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const data = await authService.getProfile();
+                if (data.success) {
+                    setUserName(data.data.user.name);
+                }
+            } catch (error) {
+                console.error("Failed to fetch profile:", error);
+            }
+        };
+        fetchProfile();
+    }, []);
+
     const stats = [
         { label: "Reviews this month", value: "128", sub: "" },
         { label: "Issues found", value: "42", sub: "" },
@@ -24,7 +43,7 @@ export default function DashboardHome({ onStartNewReview, onManageSubscription }
         <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-white mb-1">Welcome back, Alex!</h1>
+                    <h1 className="text-3xl font-bold text-white mb-1">Welcome back, {userName}!</h1>
                     <p className="text-gray-400">Here's a summary of your recent code review activity.</p>
                 </div>
                 <button

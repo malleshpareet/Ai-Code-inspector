@@ -5,3 +5,4 @@ export { default as HistoryPage } from './HistoryPage';
 export { default as NewReviewPage } from './NewReviewPage';
 export { default as ProfilePage } from './ProfilePage';
 export { default as ReviewResultsPage } from './ReviewResultsPage';
+export { default as AIAssistantPage } from './AIAssistantPage';

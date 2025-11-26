@@ -344,20 +344,19 @@ export default function NewReviewPage({ onRunReview }: NewReviewPageProps) {
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
                     <label className="block text-xs font-medium text-gray-400 mb-2">Language</label>
-                    <select className="w-full bg-[#111827] border border-gray-700 text-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-500 text-sm appearance-none">
-                        <option>Autodetect</option>
-                        <option>JavaScript</option>
-                        <option>Python</option>
-                        <option>Java</option>
-                        <option>TypeScript</option>
+                    <select
+                        className="w-full bg-[#111827] border border-gray-700 text-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-500 text-sm appearance-none"
+                        value={selectedRepo?.language || "Autodetect"}
+                        disabled
+                    >
+                        <option value="Autodetect">Autodetect</option>
+                        {selectedRepo?.language && <option value={selectedRepo.language}>{selectedRepo.language}</option>}
                     </select>
                 </div>
                 <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">AI Engine (Optional)</label>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">AI Engine</label>
                     <select className="w-full bg-[#111827] border border-gray-700 text-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-500 text-sm appearance-none">
-                        <option>Default (GPT-4 Turbo)</option>
-                        <option>Claude 3 Opus</option>
-                        <option>Gemini Pro</option>
+                        <option>Gemini 2.0 Flash (Recommended)</option>
                     </select>
                 </div>
             </div>
