@@ -9,7 +9,8 @@ import {
   HistoryPage,
   NewReviewPage,
   ReviewResultsPage,
-  AIAssistantPage
+  AIAssistantPage,
+  PaymentHistoryPage
 } from "./pages/dashboard";
 import BillingPage from "./pages/BillingPage";
 import { LoginCard, AuthCard, ForgotPasswordCard } from "./pages/auth";
@@ -83,6 +84,7 @@ export default function App() {
           <Route path="new-review" element={<NewReviewPage onRunReview={() => navigate("/dashboard/results")} />} />
           <Route path="ai-assistant" element={<AIAssistantPage />} />
           <Route path="history" element={<HistoryPage />} />
+          <Route path="payment-history" element={<PaymentHistoryPage />} />
           <Route path="billing" element={<BillingPage onBack={() => navigate("/dashboard")} embedded={true} />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="results" element={<ReviewResultsPage onBack={() => navigate("/dashboard/new-review")} />} />

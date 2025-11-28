@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import { authService } from "../../services/authService";
-import { div } from "motion/react-client";
+import { subscriptionService } from "../../services/subscriptionService";
+import type { Subscription } from "../../services/subscriptionService";
 
 interface DashboardHomeProps {
     onStartNewReview: () => void;
@@ -10,19 +11,25 @@ interface DashboardHomeProps {
 
 export default function DashboardHome({ onStartNewReview, onManageSubscription }: DashboardHomeProps) {
     const [userName, setUserName] = useState("User");
+    const [subscription, setSubscription] = useState<Subscription | null>(null);
 
     useEffect(() => {
-        const fetchProfile = async () => {
+        const fetchData = async () => {
             try {
-                const data = await authService.getProfile();
-                if (data.success) {
-                    setUserName(data.data.user.name);
+                const [profileData, subData] = await Promise.all([
+                    authService.getProfile(),
+                    subscriptionService.getCurrentSubscription()
+                ]);
+
+                if (profileData.success) {
+                    setUserName(profileData.data.user.name);
                 }
+                setSubscription(subData);
             } catch (error) {
-                console.error("Failed to fetch profile:", error);
+                console.error("Failed to fetch dashboard data:", error);
             }
         };
-        fetchProfile();
+        fetchData();
     }, []);
 
     const stats = [
@@ -38,6 +45,22 @@ export default function DashboardHome({ onStartNewReview, onManageSubscription }
         { name: "mobile-v2-onboarding-flow", status: "Completed", issues: "12 Issues", color: "text-green-500", dot: "bg-green-500" },
         { name: "docs-update-sdk-guide", status: "Failed", issues: "Build Error", color: "text-red-500", dot: "bg-red-500" },
     ];
+
+    const currentPlanName = subscription?.plan ? subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1) : 'Free';
+
+    // Mock limits based on plan (in a real app, these would come from the backend)
+    const limits = {
+        reviews: subscription?.plan === 'free' ? 50 : subscription?.plan === 'pro' ? 1000 : 99999,
+        members: subscription?.plan === 'free' ? 1 : subscription?.plan === 'pro' ? 5 : 20
+    };
+
+    const usage = {
+        reviews: 128, // Mock usage
+        members: 3    // Mock usage
+    };
+
+    const reviewPercentage = Math.min((usage.reviews / limits.reviews) * 100, 100);
+    const memberPercentage = Math.min((usage.members / limits.members) * 100, 100);
 
     return (
         <>
@@ -94,26 +117,26 @@ export default function DashboardHome({ onStartNewReview, onManageSubscription }
                 <div className="bg-[#111827] border border-gray-800 rounded-xl p-6 flex flex-col">
                     <h2 className="text-lg font-semibold text-white mb-6">Plan & Limits</h2>
                     <p className="text-gray-400 text-sm mb-6">
-                        You are on the <span className="text-blue-400 font-medium">Pro Plan</span>.
+                        You are on the <span className="text-blue-400 font-medium">{currentPlanName} Plan</span>.
                     </p>
 
                     <div className="space-y-6 mb-8">
                         <div>
                             <div className="flex justify-between text-xs mb-2">
                                 <span className="text-gray-400">Reviews Used</span>
-                                <span className="text-gray-300">750 / 1000</span>
+                                <span className="text-gray-300">{usage.reviews} / {limits.reviews === 99999 ? 'Unlimited' : limits.reviews}</span>
                             </div>
                             <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-600 w-3/4 rounded-full"></div>
+                                <div className="h-full bg-blue-600 rounded-full" style={{ width: `${reviewPercentage}%` }}></div>
                             </div>
                         </div>
                         <div>
                             <div className="flex justify-between text-xs mb-2">
                                 <span className="text-gray-400">Team Members</span>
-                                <span className="text-gray-300">3 / 5</span>
+                                <span className="text-gray-300">{usage.members} / {limits.members}</span>
                             </div>
                             <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-600 w-3/5 rounded-full"></div>
+                                <div className="h-full bg-blue-600 rounded-full" style={{ width: `${memberPercentage}%` }}></div>
                             </div>
                         </div>
                     </div>
