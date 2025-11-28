@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
     onSignUpClick: () => void;
@@ -12,6 +13,7 @@ export default function Navbar({ onSignUpClick, onLoginClick, isLoggedIn, onLogo
     const [scrolled, setScrolled] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     const [userEmail, setUserEmail] = useState("user@example.com");
 
@@ -23,12 +25,6 @@ export default function Navbar({ onSignUpClick, onLoginClick, isLoggedIn, onLogo
                     const user = JSON.parse(userStr);
                     if (user.name) {
                         setUserEmail(user.name);
-
-
-
-
-
-                        
                     }
                 } catch (e) {
                     console.error("Failed to parse user from local storage");
@@ -80,7 +76,7 @@ export default function Navbar({ onSignUpClick, onLoginClick, isLoggedIn, onLogo
                     <div className="hidden md:flex items-center gap-8">
                         <a href="#features" className="text-gray-400 hover:text-white transition text-sm font-medium">Features</a>
                         <a href="#pricing" className="text-gray-400 hover:text-white transition text-sm font-medium">Pricing</a>
-                        <a href="#" className="text-gray-400 hover:text-white transition text-sm font-medium">Docs</a>
+                        <a href="https://ai-code-inspector-documentation.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition text-sm font-medium">Docs</a>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -114,15 +110,10 @@ export default function Navbar({ onSignUpClick, onLoginClick, isLoggedIn, onLogo
                                             </div>
 
                                             <button
-                                                className="w-full text-left px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition flex items-center gap-2.5"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                </svg>
-                                                Profile
-                                            </button>
-
-                                            <button
+                                                onClick={() => {
+                                                    setIsProfileMenuOpen(false);
+                                                    navigate('/dashboard/profile');
+                                                }}
                                                 className="w-full text-left px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition flex items-center gap-2.5"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">

@@ -6,7 +6,8 @@ import {
     FaCreditCard,
     FaUser,
     FaBell,
-    FaRobot
+    FaRobot,
+    FaHome
 } from "react-icons/fa";
 
 export default function Dashboard() {
@@ -14,7 +15,7 @@ export default function Dashboard() {
     const isReviewResults = location.pathname.includes("/results");
 
     return (
-        <div className={`${location.pathname.includes("/ai-assistant") ? "h-screen" : "min-h-screen"} bg-[#0b1120] flex font-sans text-gray-100 overflow-hidden`}>
+        <div className="h-screen bg-[#0b1120] flex font-sans text-gray-100 overflow-hidden">
             {/* Sidebar */}
             {!isReviewResults && (
                 <aside className="w-64 bg-[#0f1623] border-r border-gray-800 flex flex-col">
@@ -23,7 +24,7 @@ export default function Dashboard() {
                         <span className="font-bold text-lg tracking-tight">AI Code Inspector</span>
                     </div>
 
-                    <nav className="flex-1 py-6 px-3 space-y-1">
+                    <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
                         <NavLink
                             to="/dashboard"
                             end
@@ -47,7 +48,13 @@ export default function Dashboard() {
                             to="/dashboard/history"
                             className={({ isActive }) => `w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-[#1e293b] text-blue-400" : "text-gray-400 hover:text-white hover:bg-[#1e293b]/50"}`}
                         >
-                            <FaHistory /> History
+                            <FaHistory /> Review History
+                        </NavLink>
+                        <NavLink
+                            to="/dashboard/payment-history"
+                            className={({ isActive }) => `w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-[#1e293b] text-blue-400" : "text-gray-400 hover:text-white hover:bg-[#1e293b]/50"}`}
+                        >
+                            <FaCreditCard /> Payment History
                         </NavLink>
                         <NavLink
                             to="/dashboard/billing"
@@ -61,6 +68,15 @@ export default function Dashboard() {
                         >
                             <FaUser /> Profile
                         </NavLink>
+
+                        <div className="pt-4 mt-4 border-t border-gray-800">
+                            <NavLink
+                                to="/"
+                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-[#1e293b]/50 transition-colors"
+                            >
+                                <FaHome /> Back to Home
+                            </NavLink>
+                        </div>
                     </nav>
                 </aside>
             )}
